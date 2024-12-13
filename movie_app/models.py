@@ -1,3 +1,5 @@
+# movie_app/models.py
+
 from django.db import models
 
 
@@ -11,9 +13,9 @@ class Director(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    duration = models.PositiveIntegerField()  # Продолжительность в минутах
+    duration = models.PositiveIntegerField()  # продолжительность фильма в минутах
     director = models.ForeignKey(
-        Director, on_delete=models.CASCADE, related_name="movies"
+        Director, related_name="movies", on_delete=models.CASCADE
     )
 
     def __str__(self):
@@ -22,8 +24,8 @@ class Movie(models.Model):
 
 class Review(models.Model):
     text = models.TextField()
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="reviews")
-    stars = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=5)
+    movie = models.ForeignKey(Movie, related_name="reviews", on_delete=models.CASCADE)
+    stars = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])
 
     def __str__(self):
-        return self.text[:50]
+        return f"Review for {self.movie.title}"

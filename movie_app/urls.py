@@ -1,22 +1,12 @@
-from django.urls import path
-from .views import (
-    DirectorListView,
-    DirectorDetailView,
-    MovieListView,
-    MovieDetailView,
-    ReviewListView,
-    ReviewDetailView,
-)
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import DirectorViewSet, MovieViewSet, ReviewViewSet
+
+router = DefaultRouter()
+router.register(r"directors", DirectorViewSet)
+router.register(r"movies", MovieViewSet)
+router.register(r"reviews", ReviewViewSet)
 
 urlpatterns = [
-    path("api/v1/directors/", DirectorListView.as_view(), name="director-list"),
-    path(
-        "api/v1/directors/<int:id>/",
-        DirectorDetailView.as_view(),
-        name="director-detail",
-    ),
-    path("api/v1/movies/", MovieListView.as_view(), name="movie-list"),
-    path("api/v1/movies/<int:id>/", MovieDetailView.as_view(), name="movie-detail"),
-    path("api/v1/reviews/", ReviewListView.as_view(), name="review-list"),
-    path("api/v1/reviews/<int:id>/", ReviewDetailView.as_view(), name="review-detail"),
+    path("api/v1/", include(router.urls)),
 ]
